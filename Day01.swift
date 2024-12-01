@@ -27,7 +27,7 @@ print("Part One: \(sumOne)")
 
 var sumTwo = 0
 for num in leftNums {
-  sumTwo += num * rightCounts[num, default: 0]
+  sumTwo += num * (rightCounts[num] ?? 0)
 }
 
 print("Part Two: \(sumTwo)")
