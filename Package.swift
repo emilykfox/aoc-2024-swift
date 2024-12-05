@@ -8,7 +8,7 @@ let dependencies: [Target.Dependency] = [
 ]
 
 let package = Package(
-  name: "AdventOfCode",
+  name: "AdventOfCode2024",
   platforms: [.macOS(.v13), .iOS(.v16), .watchOS(.v9), .tvOS(.v16)],
   dependencies: [
     .package(
@@ -22,7 +22,7 @@ let package = Package(
       .upToNextMajor(from: "1.5.0")),
     .package(
       url: "https://github.com/swiftlang/swift-format.git",
-      .upToNextMajor(from: "600.0.0"))
+      .upToNextMajor(from: "600.0.0")),
   ],
   targets: [
     .executableTarget(
@@ -33,7 +33,7 @@ let package = Package(
     .testTarget(
       name: "AdventOfCodeTests",
       dependencies: ["AdventOfCode"] + dependencies
-    )
+    ),
   ],
   swiftLanguageModes: [.v6]
 )
