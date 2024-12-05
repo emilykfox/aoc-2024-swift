@@ -1,11 +1,5 @@
 import Algorithms
 
-extension Array {
-  subscript(safe index: Int) -> Element? {
-    return indices ~= index ? self[index] : nil
-  }
-}
-
 struct Day04: AdventDay {
   // Save your data in a corresponding text file in the `Data` directory.
   var data: String
