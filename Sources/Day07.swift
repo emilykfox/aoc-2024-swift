@@ -20,45 +20,38 @@ struct Day07: AdventDay {
     }
   }
 
-  private func makeLHS(goal: Int, rhs: [Int], lastIndex: Int) -> Bool {
-    if lastIndex == 0 {
-      return goal == rhs[lastIndex]
+  private func canMakeLHS(lhs: Int, aggregate: Int, rhs: [Int], firstIndex: Int) -> Bool {
+    if firstIndex == rhs.count {
+      return aggregate == lhs
     }
-    if goal % rhs[lastIndex] == 0
-      && makeLHS(goal: goal / rhs[lastIndex], rhs: rhs, lastIndex: lastIndex - 1)
-    {
-      return true
-    }
-    return makeLHS(goal: goal - rhs[lastIndex], rhs: rhs, lastIndex: lastIndex - 1)
+    return canMakeLHS(
+      lhs: lhs, aggregate: aggregate + rhs[firstIndex], rhs: rhs, firstIndex: firstIndex + 1)
+      || canMakeLHS(
+        lhs: lhs, aggregate: aggregate * rhs[firstIndex], rhs: rhs, firstIndex: firstIndex + 1)
   }
 
-  private func makeLHSConcat(goal: Int, rhs: [Int], lastIndex: Int) throws -> Bool {
-    if lastIndex == 0 {
-      return goal == rhs[lastIndex]
+  private func canMakeLHSConcat(lhs: Int, aggregate: Int, rhs: [Int], firstIndex: Int)
+    -> Bool
+  {
+    if firstIndex == rhs.count {
+      return aggregate == lhs
     }
-    let regex = try Regex("(-?\\d+)\(rhs[lastIndex])$")
-    let match = String(goal).firstMatch(of: regex)
-    if let match {
-      let substring = match[1].substring!
-      if try makeLHSConcat(
-        goal: Int(substring)!, rhs: rhs, lastIndex: lastIndex - 1)
-      {
-        return true
-      }
-    }
-    if try goal % rhs[lastIndex] == 0
-      && makeLHSConcat(goal: goal / rhs[lastIndex], rhs: rhs, lastIndex: lastIndex - 1)
-    {
-      return true
-    }
-    return try makeLHSConcat(goal: goal - rhs[lastIndex], rhs: rhs, lastIndex: lastIndex - 1)
+    return canMakeLHSConcat(
+      lhs: lhs, aggregate: aggregate + rhs[firstIndex], rhs: rhs, firstIndex: firstIndex + 1)
+      || canMakeLHSConcat(
+        lhs: lhs, aggregate: aggregate * rhs[firstIndex], rhs: rhs, firstIndex: firstIndex + 1)
+      || canMakeLHSConcat(
+        lhs: lhs, aggregate: Int(String(aggregate) + String(rhs[firstIndex]))!, rhs: rhs,
+        firstIndex: firstIndex + 1)
   }
 
   // Replace this with your solution for the first part of the day's challenge.
   func part1() -> Any {
     var total = 0
     equationLoop: for equation in self.equations {
-      if makeLHS(goal: equation.lhs, rhs: equation.rhs, lastIndex: equation.rhs.count - 1) {
+      if canMakeLHS(
+        lhs: equation.lhs, aggregate: equation.rhs[0], rhs: equation.rhs, firstIndex: 1)
+      {
         total += equation.lhs
       }
     }
@@ -70,7 +63,8 @@ struct Day07: AdventDay {
   func part2() throws -> Any {
     var total = 0
     equationLoop: for equation in self.equations {
-      if try makeLHSConcat(goal: equation.lhs, rhs: equation.rhs, lastIndex: equation.rhs.count - 1)
+      if canMakeLHSConcat(
+        lhs: equation.lhs, aggregate: equation.rhs[0], rhs: equation.rhs, firstIndex: 1)
       {
         total += equation.lhs
       }
