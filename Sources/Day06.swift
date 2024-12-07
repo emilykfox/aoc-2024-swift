@@ -1,11 +1,11 @@
 import Algorithms
 
-struct Pair: Hashable {
+private struct Pair: Hashable {
   let x: Int
   let y: Int
 }
 
-struct Walked: Hashable {
+private struct Walked: Hashable {
   let pair: Pair
   let direction: String
 }
